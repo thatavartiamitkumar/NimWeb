@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<h:head>
+	<title>NIM Game</title>
+	<style>
+.gameColumn1 {
+	width: 70%;
+	vertical-align: top;
+	height: 500px;
+}
+
+.gameColumn2 {
+	width: 30%;
+	vertical-align: top;
+	height: 500px;
+}
+
+.moveColumn1 {
+	width: 80%;
+	vertical-align: top;
+}
+
+.moveColumn2 {
+	width: 20%;
+	vertical-align: top;
+}
+</style>
+</h:head>
+
+<f:view>
+	<h:body style="background-color:white">
+		<h:form id="gameForm">
+
+			<div id="heading"
+				style="text-align: center; font-size: 5em; font-family: serif; font-style: italic; color: gray; font-weight: bold;">NIM
+				Game Agent</div>
+			<p:spacer height="5px" width="100%" />
+			<p:messages />
+			<p:spacer height="20px" width="100%" />
+
+			<p:panelGrid id="firstPlay" columns="1"
+				rendered="#{!gameBean.gameMode and gameBean.gameOn}"
+				style="width: 100%">
+				<p:outputPanel style="height:450px;text-align:center;">
+					<p:spacer height="200px" />
+					<p:outputLabel value="Would you like to play first?"
+						style="text-align: center; font-size: 2em; font-family: calibri; font-style:normal;  color: white;" />
+					<p:spacer width="100px" />
+					<p:commandButton value="Yes" action="#{gameBean.userPlaysFirst}"
+						ajax="true" update="@form" />
+					<p:spacer width="30px" />
+					<p:commandButton value="No" action="#{gameBean.machinePlaysFirst}"
+						ajax="true" update="@form" />
+
+				</p:outputPanel>
+			</p:panelGrid>
+
+			<p:panelGrid columns="2" columnClasses="gameColumn1,gameColumn2"
+				id="panelGrid" style="width: 100%"
+				rendered="#{gameBean.gameMode and gameBean.gameOn}">
+
+
+				<p:panel header="Game State" id="gamePanel" style="height:550px;">
+
+					<p:dataTable value="#{gameBean.gameConfiguration}" var="stack">
+						<p:column>
+							<ui:repeat var="k" value="#{stack.tokens}">
+								<h:graphicImage alt="token" value="token.jpg"
+									rendered="#{!k.removed}" />
+								<h:outputLabel value="-"
+									style="font-weight:bold;font-size:3em;color:black"
+									rendered="#{k.removed}" />
+								<p:spacer width="5px" />
+							</ui:repeat>
+							<hr width="100%" style="height: 5px; color: inactiveborder;" />
+						</p:column>
+					</p:dataTable>
+
+				</p:panel>
+				<p:panel id="movesPanel" header="Moves" style="height:450px;">
+					<p:panel id="userMovePanel" header="User Move">
+						<p:panelGrid id="moveGrid" columns="2"
+							style="width:100%;text-align:left;vertical-align:middle;"
+							columnClasses="moveColumn1,moveColumn2">
+
+							<h:outputLabel value="Stack"  rendered="#{gameBean.numberOfStacks ne 1}" />
+							<p:inputText id="stackNumber" value="#{gameBean.stackChoosen}"
+								size="3" maxlength="1" rendered="#{gameBean.numberOfStacks ne 1}">
+								<f:convertNumber integerOnly="true" minIntegerDigits="1" />
+							</p:inputText>
+							<h:outputLabel value="Tokens" />
+							<p:inputText id="tokensRemoved" value="#{gameBean.tokensRemoved}"
+								size="3" maxlength="1">
+								<f:convertNumber integerOnly="true" minIntegerDigits="1" />
+							</p:inputText>
+
+						</p:panelGrid>
+					</p:panel>
+
+					<p:spacer height="5px" width="100%" />
+
+					<p:outputPanel style="text-align:center">
+						<p:commandButton value="Take Away" ajax="true" update="@form"
+							action="#{gameBean.userMove}" />
+					</p:outputPanel>
+
+					<p:spacer height="10px" width="100%" />
+					<p:panel id="logPanel" header="Computer Moves" toggleable="true"
+						toggleTitle="Collapse/Expand">
+						<p:inputTextarea id="computerMoveLog"
+							value="#{gameBean.computerMoveLog}" readonly="true"
+							autoResize="false" cols="30" rows="4" />
+					</p:panel>
+
+					<p:outputPanel id="buttonsPanel">
+						<p:panelGrid columns="2"
+							style="width:100%;text-align:left;vertical-align:middle;">
+							<h:commandButton value="Restart Game"
+								action="#{gameBean.restartGame}" />
+							<h:commandButton value="End Game" action="#{gameBean.quitGame}" />
+						</p:panelGrid>
+					</p:outputPanel>
+				</p:panel>
+			</p:panelGrid>
+
+			<p:panelGrid id="resultGrid" columns="1"
+				rendered="#{!gameBean.gameOn}" style="width: 100%;height:450px;">
+				<p:outputPanel style="text-align:center;">
+					<p:spacer height="100px" />
+					<p:outputLabel value="Congrats .. You Win !!"
+						style="text-align: center; font-size: 2em; font-family: calibri; font-style:normal;  color: white;"
+						rendered="#{gameBean.userWins}" />
+					<p:outputLabel value="Hard Luck ... Computer Wins !!"
+						style="text-align: center; font-size: 2em; font-family: calibri; font-style:normal;  color: white;"
+						rendered="#{!gameBean.userWins}" />
+					<p:spacer width="100px" />
+				</p:outputPanel>
+				<p:outputPanel style="text-align:center;">
+					<p:commandButton value="Play Again?"
+						action="#{gameBean.restartGame}" ajax="true" update="@form" />
+					<p:spacer width="30px" />
+					<p:commandButton value="Quit" action="#{gameBean.quitGame}" />
+				</p:outputPanel>
+			</p:panelGrid>
+		</h:form>
+	</h:body>
+
+</f:view>
+</html>

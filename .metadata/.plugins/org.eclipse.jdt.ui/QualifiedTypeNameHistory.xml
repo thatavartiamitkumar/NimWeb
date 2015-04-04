@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="javax.faces.application.FacesMessage"/>
+<fullyQualifiedTypeName name="com.sun.xml.internal.bind.v2.schemagen.xmlschema.List"/>
+<fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="edu.ua.ai.nim.util.State"/>
+<fullyQualifiedTypeName name="java.lang.SafeVarargs"/>
+<fullyQualifiedTypeName name="java.util.Map"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="java.lang.management.MemoryManagerMXBean"/>
+<fullyQualifiedTypeName name="java.lang.management.MemoryUsage"/>
+<fullyQualifiedTypeName name="java.lang.Runtime"/>
+</qualifiedTypeNameHistroy>
